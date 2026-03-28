@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: ai-java-create-backend
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+# springdoc-openapi
+springdoc:
+  group-configs:
+    - group: 'default'
+      packages-to-scan: org.example.aijavacreate.controller
+# knife4j
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
