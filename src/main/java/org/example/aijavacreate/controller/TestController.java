@@ -1,5 +1,7 @@
 package org.example.aijavacreate.controller;
 
+import org.example.aijavacreate.common.BaseResponse;
+import org.example.aijavacreate.common.ResultUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
 
     @GetMapping("/")
-    public String hello() {
-        return "hello world";
+    public BaseResponse<String> hello() {
+        return ResultUtils.success("hello world");
     }
 }
