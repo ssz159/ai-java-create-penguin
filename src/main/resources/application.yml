@@ -1,6 +1,11 @@
 spring:
   application:
     name: ai-java-create-backend
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ai_java_penguin
+    username: root
+    password: 1234
 server:
   port: 8080
   servlet:
