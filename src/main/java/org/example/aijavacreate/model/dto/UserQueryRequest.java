@@ -1,13 +1,17 @@
 package org.example.aijavacreate.model.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.example.aijavacreate.common.PageRequest;
 
 import java.io.Serializable;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserQueryRequest extends PageRequest implements Serializable {
 
     /**

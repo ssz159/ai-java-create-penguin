@@ -1,4 +1,3 @@
-/// <reference path="./typings.d.ts" />
 // @ts-ignore
 /* eslint-disable */
 import request from '@/request'

@@ -56,7 +56,6 @@ public class UserController {
         return ResultUtils.success(result);
     }
 
-
     /**
      *  用户登录
      * @param userLoginRequest 用户登录请求

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import BasicLayout from '@/layouts/BasicLayout.vue'
 
-import { hello } from '@/api/testController.ts'
+import { useLoginUserStore } from '@/stores/loginUser.ts'
+/*// 获取登录用户信息
+const loginUserStore = useLoginUserStore()
+loginUserStore.fetchLoginUser()*/
 
-hello().then((res) => {
-  console.log(res)
-})
 </script>
 
 <template>
