@@ -3,7 +3,7 @@ package org.example.aijavacreate.core.parser;
 /**
  * 代码解析器策略接口
  * 
- * @author yupi
+ * @author penguin
  */
 public interface CodeParser<T> {
 

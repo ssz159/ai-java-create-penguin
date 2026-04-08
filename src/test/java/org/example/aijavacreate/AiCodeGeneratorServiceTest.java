@@ -20,7 +20,7 @@ public class AiCodeGeneratorServiceTest {
      */
     @Test
     void generateHtmlCode() {
-        HtmlCodeResult result = aiCodeGeneratorService.generateHtmlCode("做个程序员鱼皮的工作记录小工具");
+        HtmlCodeResult result = aiCodeGeneratorService.generateHtmlCode("做个penguin的工作记录小工具");
         Assertions.assertNotNull(result);
     }
     /**
@@ -28,7 +28,7 @@ public class AiCodeGeneratorServiceTest {
      */
     @Test
     void generateMultiFileCode() {
-        MultiFileCodeResult multiFileCode = aiCodeGeneratorService.generateMultiFileCode("做个程序员鱼皮的留言板");
+        MultiFileCodeResult multiFileCode = aiCodeGeneratorService.generateMultiFileCode("做个penguin的留言板");
         Assertions.assertNotNull(multiFileCode);
     }
 }

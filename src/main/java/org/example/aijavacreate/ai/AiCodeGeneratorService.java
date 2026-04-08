@@ -6,7 +6,7 @@ import org.example.aijavacreate.ai.model.MultiFileCodeResult;
 import reactor.core.publisher.Flux;
 
 public interface AiCodeGeneratorService {
-
+    //同步生成 HTML 代码
     /**
      * 生成 HTML 代码
      *
@@ -15,7 +15,7 @@ public interface AiCodeGeneratorService {
      */
     @SystemMessage(fromResource = "prompt/codegen-html-system-prompt.txt")
     HtmlCodeResult generateHtmlCode(String userMessage);
-
+    //同步生成多文件代码
     /**
      * 生成多文件代码
      *
@@ -24,7 +24,7 @@ public interface AiCodeGeneratorService {
      */
     @SystemMessage(fromResource = "prompt/codegen-multi-file-system-prompt.txt")
     MultiFileCodeResult generateMultiFileCode(String userMessage);
-    //流式生成代码
+    //流式生成 HTML 代码
     /**
      * 生成 HTML 代码
      *
@@ -33,7 +33,7 @@ public interface AiCodeGeneratorService {
      */
     @SystemMessage(fromResource = "prompt/codegen-html-system-prompt.txt")
     Flux<String> generateHtmlCodeStream(String userMessage);
-
+    //流式生成多文件代码
     /**
      * 生成多文件代码
      *

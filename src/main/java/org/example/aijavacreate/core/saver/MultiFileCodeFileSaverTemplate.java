@@ -9,15 +9,19 @@ import org.example.aijavacreate.model.enums.CodeGenTypeEnum;
 /**
  * 多文件代码保存器
  *
- * @author yupi
+ * @author penguin
  */
 public class MultiFileCodeFileSaverTemplate extends CodeFileSaverTemplate<MultiFileCodeResult> {
-
     @Override
     public CodeGenTypeEnum getCodeType() {
         return CodeGenTypeEnum.MULTI_FILE;
     }
-
+    /**
+     * 保存多文件代码
+     *
+     * @param result      代码结果对象
+     * @param baseDirPath 基础目录路径
+     */
     @Override
     protected void saveFiles(MultiFileCodeResult result, String baseDirPath) {
         // 保存 HTML 文件
@@ -27,7 +31,12 @@ public class MultiFileCodeFileSaverTemplate extends CodeFileSaverTemplate<MultiF
         // 保存 JavaScript 文件
         writeToFile(baseDirPath, "script.js", result.getJsCode());
     }
-
+    /**
+     * 验证输入参数
+     *
+     * @param result 代码结果对象
+     * @throws BusinessException 如果 HTML 代码为空则抛出异常
+     */
     @Override
     protected void validateInput(MultiFileCodeResult result) {
         super.validateInput(result);
