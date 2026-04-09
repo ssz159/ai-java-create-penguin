@@ -1,23 +1,15 @@
-package org.example.aijavacreate.model.dto;
+package org.example.aijavacreate.model.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.example.aijavacreate.common.PageRequest;
 
 import java.io.Serializable;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserQueryRequest extends PageRequest implements Serializable {
-
-    /**
-     * id
-     */
-    private Long id;
+public class UserAddRequest implements Serializable {
 
     /**
      * 用户昵称
@@ -30,12 +22,17 @@ public class UserQueryRequest extends PageRequest implements Serializable {
     private String userAccount;
 
     /**
-     * 简介
+     * 用户头像
+     */
+    private String userAvatar;
+
+    /**
+     * 用户简介
      */
     private String userProfile;
 
     /**
-     * 用户角色：user/admin/ban
+     * 用户角色: user, admin
      */
     private String userRole;
 

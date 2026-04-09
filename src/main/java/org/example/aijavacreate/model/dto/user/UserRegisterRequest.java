@@ -1,4 +1,4 @@
-package org.example.aijavacreate.model.dto;
+package org.example.aijavacreate.model.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
