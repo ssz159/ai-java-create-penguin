@@ -3,7 +3,7 @@ package org.example.aijavacreate.service;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.service.IService;
 import jakarta.servlet.http.HttpServletRequest;
-import org.example.aijavacreate.model.dto.UserQueryRequest;
+import org.example.aijavacreate.model.dto.user.UserQueryRequest;
 import org.example.aijavacreate.model.entity.User;
 import org.example.aijavacreate.model.vo.LoginUserVO;
 import org.example.aijavacreate.model.vo.UserVO;
