@@ -3,8 +3,10 @@ package org.example.aijavacreate.service;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.service.IService;
 import org.example.aijavacreate.model.entity.App;
+import org.example.aijavacreate.model.entity.User;
 import org.example.aijavacreate.model.vo.AppQueryRequest;
 import org.example.aijavacreate.model.vo.AppVO;
+import reactor.core.publisher.Flux;
 
 import java.util.List;
 
@@ -37,6 +39,16 @@ public interface AppService extends IService<App> {
      * @return 查询条件
      */
      QueryWrapper getQueryWrapper(AppQueryRequest appQueryRequest);
+
+
+    /**
+     * 聊天生成代码
+     * @param appId 应用id
+     * @param message 消息内容
+     * @param loginUser 登录用户
+     * @return 代码流
+     */
+     Flux<String> chatToGenCode(Long appId, String message, User loginUser);
 
 
 
