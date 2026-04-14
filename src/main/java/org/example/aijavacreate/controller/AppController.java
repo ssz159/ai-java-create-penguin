@@ -18,6 +18,7 @@ import org.example.aijavacreate.exception.ErrorCode;
 import org.example.aijavacreate.exception.ThrowUtils;
 import org.example.aijavacreate.model.dto.app.AppAddRequest;
 import org.example.aijavacreate.model.dto.app.AppAdminUpdateRequest;
+import org.example.aijavacreate.model.dto.app.AppDeployRequest;
 import org.example.aijavacreate.model.dto.app.AppUpdateRequest;
 import org.example.aijavacreate.model.entity.User;
 import org.example.aijavacreate.model.enums.CodeGenTypeEnum;
@@ -27,7 +28,6 @@ import org.example.aijavacreate.service.UserService;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.example.aijavacreate.model.entity.App;
 import org.example.aijavacreate.service.AppService;
 import reactor.core.publisher.Flux;
@@ -86,6 +86,25 @@ public class AppController {
                                 .data("")
                                 .build()
                 ));
+    }
+    /**
+     * 应用部署
+     *
+     * @param appDeployRequest 部署请求
+     * @param request          请求
+     * @return 部署 URL
+     */
+    @PostMapping("/deploy")
+    public BaseResponse<String> deployApp(@RequestBody AppDeployRequest appDeployRequest, HttpServletRequest request) {
+        //校验请求参数
+        ThrowUtils.throwIf(appDeployRequest == null, ErrorCode.PARAMS_ERROR);
+        Long appId = appDeployRequest.getAppId();
+        ThrowUtils.throwIf(appId == null || appId <= 0, ErrorCode.PARAMS_ERROR, "应用 ID 不能为空");
+        // 获取当前登录用户
+        User loginUser = userService.getLoginUser(request);
+        // 调用服务部署应用
+        String deployUrl = appService.deployApp(appId, loginUser);
+        return ResultUtils.success(deployUrl);
     }
 
 

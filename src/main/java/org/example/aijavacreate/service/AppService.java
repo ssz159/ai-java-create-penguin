@@ -22,7 +22,7 @@ public interface AppService extends IService<App> {
      * @param app 应用
      * @return 应用VO
      */
-    public AppVO getAppVO(App app);
+    AppVO getAppVO(App app);
 
     /**
      * 获取应用VO列表
@@ -31,6 +31,13 @@ public interface AppService extends IService<App> {
      * @return 应用VO列表
      */
     List<AppVO> getAppVOList(List<App> appList);
+
+    /**应用部署列表
+     * @param appId 应用id
+     * @param loginUser 登录用户
+     * @return 返回应用部署地址
+     */
+     String deployApp(Long appId, User loginUser);
 
     /**
      * 获取查询条件
