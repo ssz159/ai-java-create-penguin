@@ -25,17 +25,17 @@
     </a-form>
   </div>
 </template>
-
 <script lang="ts" setup>
-import { reactive } from 'vue';
-import { useRouter } from 'vue-router'
-import { useLoginUserStore } from '@/stores/loginUser.ts'
+import { reactive } from 'vue'
 import { userLogin } from '@/api/userController.ts'
+import { useLoginUserStore } from '@/stores/loginUser.ts'
+import { useRouter } from 'vue-router'
 import { message } from 'ant-design-vue'
+
 const formState = reactive<API.UserLoginRequest>({
   userAccount: '',
   userPassword: '',
-});
+})
 
 const router = useRouter()
 const loginUserStore = useLoginUserStore()
@@ -58,44 +58,31 @@ const handleSubmit = async (values: any) => {
     message.error('登录失败，' + res.data.message)
   }
 }
-
 </script>
 
-<style scoped>#userLoginPage {
-  max-width: 400px;
-  margin: 100px auto;
-  padding: 40px;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-  background: #fff;
+<style scoped>
+#userLoginPage {
+  background: white;
+  max-width: 720px;
+  padding: 24px;
+  margin: 24px auto;
 }
 
 .title {
   text-align: center;
-  margin-bottom: 8px;
-  font-size: 24px;
-  color: #1f1f1f;
+  margin-bottom: 16px;
 }
 
 .desc {
   text-align: center;
-  margin-bottom: 32px;
-  color: rgba(0, 0, 0, 0.45);
-  font-size: 14px;
+  color: #bbb;
+  margin-bottom: 16px;
 }
 
 .tips {
-  margin-bottom: 16px;
   text-align: right;
+  color: #bbb;
   font-size: 13px;
-}
-
-.tips a {
-  color: #1890ff;
-  text-decoration: none;
-}
-
-.tips a:hover {
-  text-decoration: underline;
+  margin-bottom: 16px;
 }
 </style>

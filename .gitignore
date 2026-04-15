@@ -35,3 +35,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Frontend build cache
+.vite/
+.DS_Store
