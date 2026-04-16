@@ -45,6 +45,7 @@ const router = createRouter({
       name: '编辑应用',
       component: AppEditPage,
     },
+
   ],
 })
 
