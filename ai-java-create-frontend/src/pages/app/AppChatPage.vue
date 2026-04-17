@@ -148,13 +148,14 @@ import {
   deployApp as deployAppApi,
   deleteApp as deleteAppApi,
 } from '@/api/appController'
+import { listAppChatHistory } from '@/api/chatHistoryController'
 import { CodeGenTypeEnum } from '@/utils/codeGenTypes'
 import request from '@/request'
 
 import MarkdownRenderer from '@/components/MarkdownRenderer.vue'
 import AppDetailModal from '@/components/AppDetailModal.vue'
 import DeploySuccessModal from '@/components/DeploySuccessModal.vue'
-import aiAvatar from '@/assets/aiPenguin.png'
+import aiAvatar from '@/assets/aiAvatar.png'
 import { API_BASE_URL, getStaticPreviewUrl } from '@/config/env'
 
 import {
@@ -230,8 +231,11 @@ const fetchAppInfo = async () => {
       // 检查是否有view=1参数，如果有则不自动发送初始提示词
       const isViewMode = route.query.view === '1'
 
-      // 自动发送初始提示词（除非是查看模式或已经进行过初始对话）
-      if (appInfo.value.initPrompt && !isViewMode && !hasInitialConversation.value) {
+      // 先加载历史对话
+      await loadChatHistory()
+
+      // 只有在没有历史对话且不是查看模式时，才发送初始提示词
+      if (appInfo.value.initPrompt && !isViewMode && messages.value.length === 0) {
         hasInitialConversation.value = true
         await sendInitialMessage(appInfo.value.initPrompt)
       }
@@ -243,6 +247,35 @@ const fetchAppInfo = async () => {
     console.error('获取应用信息失败：', error)
     message.error('获取应用信息失败')
     router.push('/')
+  }
+}
+
+// 加载历史对话
+const loadChatHistory = async () => {
+  if (!appId.value) return
+
+  try {
+    const res = await listAppChatHistory({
+      appId: appId.value as unknown as number,
+      pageSize: 50, // 一次加载50条历史记录
+    })
+
+    if (res.data.code === 0 && res.data.data?.records) {
+      const records = res.data.data.records
+
+      // 转换为消息格式（后端已按时间正序返回）
+      messages.value = records.map((record) => ({
+        type: record.messageType === 'user' ? 'user' : 'ai',
+        content: record.message || '',
+      }))
+
+      // 滚动到底部
+      await nextTick()
+      scrollToBottom()
+    }
+  } catch (error) {
+    console.error('加载历史对话失败：', error)
+    // 不显示错误提示，避免影响用户体验
   }
 }
 

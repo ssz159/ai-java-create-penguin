@@ -40,7 +40,7 @@ public class ChatHistoryController {
      */
     @GetMapping("/app/{appId}")
     public BaseResponse<Page<ChatHistory>> listAppChatHistory(@PathVariable Long appId,
-                                                              @RequestParam(defaultValue = "10") int pageSize,
+                                                              @RequestParam(defaultValue = "50") int pageSize,
                                                               @RequestParam(required = false) LocalDateTime lastCreateTime,
                                                               HttpServletRequest request) {
         User loginUser = userService.getLoginUser(request);// 获取当前登录用户

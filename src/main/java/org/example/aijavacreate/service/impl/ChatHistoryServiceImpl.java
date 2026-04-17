@@ -16,6 +16,7 @@ import org.example.aijavacreate.model.entity.User;
 import org.example.aijavacreate.model.enums.ChatHistoryMessageTypeEnum;
 import org.example.aijavacreate.service.AppService;
 import org.example.aijavacreate.service.ChatHistoryService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -29,6 +30,7 @@ import java.time.LocalDateTime;
 public class ChatHistoryServiceImpl extends ServiceImpl<ChatHistoryMapper, ChatHistory>  implements ChatHistoryService{
 
     @Resource
+    @Lazy
     protected AppService appService;
     /**
      * 添加对话消息
@@ -75,8 +77,8 @@ public class ChatHistoryServiceImpl extends ServiceImpl<ChatHistoryMapper, ChatH
     /**
      * 获取查询包装类
      *
-     * @param chatHistoryQueryRequest
-     * @return
+     * @param chatHistoryQueryRequest 查询参数对象
+     * @return 查询包装类
      */
     @Override
     public QueryWrapper getQueryWrapper(ChatHistoryQueryRequest chatHistoryQueryRequest) {
@@ -106,8 +108,8 @@ public class ChatHistoryServiceImpl extends ServiceImpl<ChatHistoryMapper, ChatH
         if (StrUtil.isNotBlank(sortField)) {
             queryWrapper.orderBy(sortField, "ascend".equals(sortOrder));
         } else {
-            // 默认按创建时间降序排列
-            queryWrapper.orderBy("createTime", false);
+            // 默认按创建时间正序排列（旧消息在上，新消息在下）
+            queryWrapper.orderBy("createTime", true);
         }
         return queryWrapper;
     }
@@ -125,7 +127,7 @@ public class ChatHistoryServiceImpl extends ServiceImpl<ChatHistoryMapper, ChatH
                                                       LocalDateTime lastCreateTime,
                                                       User loginUser) {
         ThrowUtils.throwIf(appId == null || appId <= 0, ErrorCode.PARAMS_ERROR, "应用ID不能为空");
-        ThrowUtils.throwIf(pageSize <= 0 || pageSize > 50, ErrorCode.PARAMS_ERROR, "页面大小必须在1-50之间");
+        ThrowUtils.throwIf(pageSize <= 0 || pageSize > 100, ErrorCode.PARAMS_ERROR, "页面大小必须在1-100之间");
         ThrowUtils.throwIf(loginUser == null, ErrorCode.NOT_LOGIN_ERROR);
         // 验证权限：只有应用创建者和管理员可以查看
         App app = appService.getById(appId);
@@ -138,7 +140,8 @@ public class ChatHistoryServiceImpl extends ServiceImpl<ChatHistoryMapper, ChatH
         queryRequest.setAppId(appId);
         queryRequest.setLastCreateTime(lastCreateTime);
         QueryWrapper queryWrapper = this.getQueryWrapper(queryRequest);
-        // 查询数据
+        
+        // 查询数据（getQueryWrapper 已处理排序）
         return this.page(Page.of(1, pageSize), queryWrapper);
     }
 }

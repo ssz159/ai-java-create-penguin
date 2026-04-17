@@ -24,6 +24,7 @@ import org.example.aijavacreate.model.vo.AppQueryRequest;
 import org.example.aijavacreate.model.vo.AppVO;
 import org.example.aijavacreate.model.vo.UserVO;
 import org.example.aijavacreate.service.AppService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
@@ -49,6 +50,7 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App>  implements AppS
     @Resource
     private AiCodeGeneratorFacade aiCodeGeneratorFacade;
     @Resource
+    @Lazy
     private ChatHistoryServiceImpl chatHistoryService;
 
     @Override
