@@ -3,6 +3,7 @@ package org.example.aijavacreate.service;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.service.IService;
+import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import org.example.aijavacreate.model.dto.chathistory.ChatHistoryQueryRequest;
 import org.example.aijavacreate.model.entity.ChatHistory;
 import org.example.aijavacreate.model.entity.User;
@@ -35,6 +36,8 @@ public interface ChatHistoryService extends IService<ChatHistory> {
      */
     boolean deleteByAppId(Long appId);
 
+
+    int loadChatHistoryToMemory(Long appId, MessageWindowChatMemory chatMemory, int maxCount);
 
     /**
      * 获取查询包装类

@@ -1,11 +1,19 @@
 spring:
   application:
     name: ai-java-create-backend
+  # 数据库配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/ai_java_penguin
     username: root
     password: 1234
+  #Redis配置
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password:
+      ttl: 3600
   profiles:
     active: local
 server:
