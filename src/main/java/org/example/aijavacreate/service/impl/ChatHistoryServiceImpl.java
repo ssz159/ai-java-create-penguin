@@ -105,7 +105,7 @@ public class ChatHistoryServiceImpl extends ServiceImpl<ChatHistoryMapper, ChatH
             queryWrapper.lt("createTime", lastCreateTime);
         }
         // 排序
-        if (StrUtil.isNotBlank(sortField)) {
+        if (StrUtil.isNotBlank(sortField)) {// 如果排序字段不为空，则按照指定字段排序
             queryWrapper.orderBy(sortField, "ascend".equals(sortOrder));
         } else {
             // 默认按创建时间正序排列（旧消息在上，新消息在下）
@@ -132,14 +132,14 @@ public class ChatHistoryServiceImpl extends ServiceImpl<ChatHistoryMapper, ChatH
         // 验证权限：只有应用创建者和管理员可以查看
         App app = appService.getById(appId);
         ThrowUtils.throwIf(app == null, ErrorCode.NOT_FOUND_ERROR, "应用不存在");
-        boolean isAdmin = UserConstant.ADMIN_ROLE.equals(loginUser.getUserRole());
-        boolean isCreator = app.getUserId().equals(loginUser.getId());
+        boolean isAdmin = UserConstant.ADMIN_ROLE.equals(loginUser.getUserRole());//判断用户是否为管理员 是管理员则返回true，否则返回false
+        boolean isCreator = app.getUserId().equals(loginUser.getId());//判断用户是否为应用创建者 是应用创建者返回true，否则返回false
         ThrowUtils.throwIf(!isAdmin && !isCreator, ErrorCode.NO_AUTH_ERROR, "无权查看该应用的对话历史");
         // 构建查询条件
-        ChatHistoryQueryRequest queryRequest = new ChatHistoryQueryRequest();
-        queryRequest.setAppId(appId);
-        queryRequest.setLastCreateTime(lastCreateTime);
-        QueryWrapper queryWrapper = this.getQueryWrapper(queryRequest);
+        ChatHistoryQueryRequest queryRequest = new ChatHistoryQueryRequest();//创建查询条件对象 queryRequest
+        queryRequest.setAppId(appId);//设置应用ID
+        queryRequest.setLastCreateTime(lastCreateTime);//设置游标时间
+        QueryWrapper queryWrapper = this.getQueryWrapper(queryRequest);//获取查询条件 queryWrapper
         
         // 查询数据（getQueryWrapper 已处理排序）
         return this.page(Page.of(1, pageSize), queryWrapper);
