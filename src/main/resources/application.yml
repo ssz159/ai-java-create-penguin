@@ -7,6 +7,11 @@ spring:
     url: jdbc:mysql://localhost:3306/ai_java_penguin
     username: root
     password: 1234
+  # session 配置
+  session:
+    store-type: redis
+    # session 30 天过期
+    timeout: 2592000
   #Redis配置
   data:
     redis:
@@ -20,6 +25,10 @@ server:
   port: 8080
   servlet:
     context-path: /api
+    # cookie 30 天过期
+    session:
+      cookie:
+        max-age: 2592000
 # springdoc-openapi
 springdoc:
   group-configs:

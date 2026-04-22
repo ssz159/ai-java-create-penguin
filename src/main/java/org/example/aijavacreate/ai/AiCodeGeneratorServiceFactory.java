@@ -47,7 +47,6 @@ public class AiCodeGeneratorServiceFactory {
                 log.debug("AI 服务实例被移除，appId: {}, 原因: {}", key, cause);
             })
             .build();
-
     /**
      * 根据 appId 获取服务（带缓存）
      */
@@ -55,7 +54,6 @@ public class AiCodeGeneratorServiceFactory {
         // 根据 appId 获取服务实例，如果不存在则使用createAiCodeGeneratorService方法创建新的实例
         return serviceCache.get(appId, this::createAiCodeGeneratorService);
     }
-
     /**
      * 创建新的 AI 服务实例
      */
