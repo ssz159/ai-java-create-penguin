@@ -1,12 +1,19 @@
 package org.example.aijavacreate.core;
 
 
+import cn.hutool.json.JSONUtil;
+import dev.langchain4j.model.chat.response.ChatResponse;
+import dev.langchain4j.service.TokenStream;
+import dev.langchain4j.service.tool.ToolExecution;
 import org.example.aijavacreate.ai.AiCodeGeneratorService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.example.aijavacreate.ai.AiCodeGeneratorServiceFactory;
 import org.example.aijavacreate.ai.model.HtmlCodeResult;
 import org.example.aijavacreate.ai.model.MultiFileCodeResult;
+import org.example.aijavacreate.ai.model.message.AiResponseMessage;
+import org.example.aijavacreate.ai.model.message.ToolExecutedMessage;
+import org.example.aijavacreate.ai.model.message.ToolRequestMessage;
 import org.example.aijavacreate.core.parser.CodeParserExecutor;
 import org.example.aijavacreate.core.saver.CodeFileSaverExecutor;
 import org.example.aijavacreate.exception.BusinessException;
@@ -68,7 +75,7 @@ public class AiCodeGeneratorFacade {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "生成类型为空");
         }
         // 从工厂中获取 AI 代码生成服务实例
-        AiCodeGeneratorService aiCodeGeneratorService = aiCodeGeneratorServiceFactory.getAiCodeGeneratorService(appId);
+        AiCodeGeneratorService aiCodeGeneratorService = aiCodeGeneratorServiceFactory.getAiCodeGeneratorService(appId, codeGenTypeEnum);
         return switch (codeGenTypeEnum) {
             case HTML -> {
                 Flux<String> codeStream = aiCodeGeneratorService.generateHtmlCodeStream(userMessage);
@@ -79,14 +86,51 @@ public class AiCodeGeneratorFacade {
                 yield processCodeStream(codeStream, CodeGenTypeEnum.MULTI_FILE,appId);
             }
             case VUE_PROJECT -> {
-                Flux<String> codeStream = aiCodeGeneratorService.generateVueProjectCodeStream(appId, userMessage);
-                yield processCodeStream(codeStream, CodeGenTypeEnum.VUE_PROJECT,appId);
+                TokenStream tokenStream = aiCodeGeneratorService.generateVueProjectCodeStream(appId, userMessage);
+                yield processTokenStream(tokenStream);
             }
             default -> {
                 String errorMessage = "不支持的生成类型：" + codeGenTypeEnum.getValue();
                 throw new BusinessException(ErrorCode.SYSTEM_ERROR, errorMessage);
             }
         };
+    }
+
+    /**
+     * 将 TokenStream 转换为 Flux<String>，并传递工具调用信息
+     *
+     * @param tokenStream TokenStream 对象
+     * @return Flux<String> 流式响应
+     */
+    private Flux<String> processTokenStream(TokenStream tokenStream) {
+        return Flux.create(sink -> {
+            tokenStream.onPartialResponse((String partialResponse) -> {
+                        // 创建 AiResponseMessage 对象 ，并设置 partialResponse 为内容
+                        AiResponseMessage aiResponseMessage = new AiResponseMessage(partialResponse);
+                        //将 部分响应 转换为 JSON 字符串并传递给下游处理
+                        sink.next(JSONUtil.toJsonStr(aiResponseMessage));
+                    })
+                    .onPartialToolExecutionRequest((index, toolExecutionRequest) -> {
+                        // 创建 ToolRequestMessage 对象 ，并设置 toolExecutionRequest 为内容
+                        ToolRequestMessage toolRequestMessage = new ToolRequestMessage(toolExecutionRequest);
+                        //将 工具调用请求 转换为 JSON 字符串并传递给下游处理
+                        sink.next(JSONUtil.toJsonStr(toolRequestMessage));
+                    })
+                    .onToolExecuted((ToolExecution toolExecution) -> {
+                        // 创建 ToolExecutedMessage 对象 ，并设置 toolExecution 为内容
+                        ToolExecutedMessage toolExecutedMessage = new ToolExecutedMessage(toolExecution);
+                        //将 工具调用执行结果 转换为 JSON 字符串并传递给下游处理
+                        sink.next(JSONUtil.toJsonStr(toolExecutedMessage));
+                    })
+                    .onCompleteResponse((ChatResponse response) -> {
+                        sink.complete();//完成响应
+                    })
+                    .onError((Throwable error) -> {
+                        error.printStackTrace();//打印错误信息
+                        sink.error(error);//将错误传递给下游处理
+                    })
+                    .start();//启动 TokenStream 流
+        });
     }
 
 

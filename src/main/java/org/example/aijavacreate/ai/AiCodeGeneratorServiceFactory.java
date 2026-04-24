@@ -73,7 +73,6 @@ public class AiCodeGeneratorServiceFactory {
         //根据 缓存键 获取服务实例，如果不存在则使用createAiCodeGeneratorService方法创建新的实例
         return serviceCache.get(cacheKey, key -> createAiCodeGeneratorService(appId, codeGenType));
     }
-
     /**
      * 构建缓存键
      */
@@ -88,9 +87,9 @@ public class AiCodeGeneratorServiceFactory {
         // 根据 appId 构建独立的对话记忆
         MessageWindowChatMemory chatMemory = MessageWindowChatMemory
                 .builder()
-                .id(appId)
-                .chatMemoryStore(redisChatMemoryStore)
-                .maxMessages(20)
+                .id(appId)//设置记忆的唯一标识为 appId
+                .chatMemoryStore(redisChatMemoryStore)//设置对话记忆存储为 RedisChatMemoryStore
+                .maxMessages(20)//设置对话记忆中保存的最大对话数为 20 条
                 .build();
         // 从数据库加载历史对话到记忆中
         chatHistoryService.loadChatHistoryToMemory(appId, chatMemory, 20);
@@ -98,21 +97,21 @@ public class AiCodeGeneratorServiceFactory {
         return switch (codeGenType) {
             // Vue 项目生成使用推理模型
             case VUE_PROJECT -> AiServices.builder(AiCodeGeneratorService.class)
-                    .streamingChatModel(reasoningStreamingChatModel)
-                    .chatMemoryProvider(memoryId -> chatMemory)
-                    .tools(new FileWriteTool())
+                    .streamingChatModel(reasoningStreamingChatModel)//设置推理模型
+                    .chatMemoryProvider(memoryId -> chatMemory)//设置对话记忆提供器，根据 appId 提供对应的记忆
+                    .tools(new FileWriteTool())//添加文件写入工具
                     .hallucinatedToolNameStrategy(toolExecutionRequest -> ToolExecutionResultMessage.from(
-                            toolExecutionRequest, "Error: there is no tool called " + toolExecutionRequest.name()
+                            toolExecutionRequest, "Error: there is no tool called " + toolExecutionRequest.name()//设置幻觉工具名称策略，返回错误信息
                     ))
                     .build();
             // HTML 和多文件生成使用默认模型
             case HTML, MULTI_FILE -> AiServices.builder(AiCodeGeneratorService.class)
-                    .chatModel(chatModel)
-                    .streamingChatModel(openAiStreamingChatModel)
-                    .chatMemory(chatMemory)
+                    .chatModel(chatModel)//设置默认模型
+                    .streamingChatModel(openAiStreamingChatModel)//设置默认流式模型
+                    .chatMemory(chatMemory)//设置默认对话记忆为 chatMemory
                     .build();
             default -> throw new BusinessException(ErrorCode.SYSTEM_ERROR,
-                    "不支持的代码生成类型: " + codeGenType.getValue());
+                    "不支持的代码生成类型: " + codeGenType.getValue());//抛出异常，提示不支持的代码生成类型
         };
     }
 
