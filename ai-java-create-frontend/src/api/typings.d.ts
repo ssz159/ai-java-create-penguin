@@ -123,10 +123,14 @@ declare namespace API {
   type ChatHistoryQueryRequest = {
     pageNum?: number
     pageSize?: number
+    sortField?: string
+    sortOrder?: string
+    id?: number
     message?: string
     messageType?: string
     appId?: number
     userId?: number
+    lastCreateTime?: string
   }
 
   type chatToGenCodeParams = {
@@ -136,6 +140,10 @@ declare namespace API {
 
   type DeleteRequest = {
     id?: number
+  }
+
+  type downloadAppCodeParams = {
+    appId: number
   }
 
   type getAppVOByIdByAdminParams = {
