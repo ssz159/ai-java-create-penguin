@@ -2,6 +2,7 @@ package org.example.aijavacreate.service;
 
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.service.IService;
+import org.example.aijavacreate.model.dto.app.AppAddRequest;
 import org.example.aijavacreate.model.entity.App;
 import org.example.aijavacreate.model.entity.User;
 import org.example.aijavacreate.model.vo.AppQueryRequest;
@@ -16,6 +17,8 @@ import java.util.List;
  * @author <a href="https://gitee.com/Sszday">Sszday</a>
  */
 public interface AppService extends IService<App> {
+    Long createApp(AppAddRequest appAddRequest, User loginUser);
+
     /**
      * 获取应用VO
      *

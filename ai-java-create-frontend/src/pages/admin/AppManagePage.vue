@@ -8,6 +8,14 @@
       <a-form-item label="创建者">
         <a-input v-model:value="searchParams.userId" placeholder="输入用户ID" />
       </a-form-item>
+      <div class="info-item">
+        <span class="info-label">生成类型：</span>
+        <a-tag v-if="app?.codeGenType" color="blue">
+          {{ formatCodeGenType(app.codeGenType) }}
+        </a-tag>
+        <span v-else>未知类型</span>
+      </div>
+
       <a-form-item label="生成类型">
         <a-select
           v-model:value="searchParams.codeGenType"
@@ -96,6 +104,7 @@ import { listAppVoByPageByAdmin, deleteAppByAdmin, updateAppByAdmin } from '@/ap
 import { CODE_GEN_TYPE_OPTIONS, formatCodeGenType } from '@/utils/codeGenTypes'
 import { formatTime } from '@/utils/time'
 import UserInfo from '@/components/UserInfo.vue'
+import app from '@/App.vue'
 
 const router = useRouter()
 
