@@ -1,34 +1,12 @@
 spring:
   application:
     name: ai-java-create-backend
-  # 数据库配置
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/ai_java_penguin
-    username: root
-    password: 1234
-  # session 配置
-  session:
-    store-type: redis
-    # session 30 天过期
-    timeout: 2592000
-  #Redis配置
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      password:
-      ttl: 3600
   profiles:
     active: local
 server:
   port: 8080
   servlet:
     context-path: /api
-    # cookie 30 天过期
-    session:
-      cookie:
-        max-age: 2592000
 # springdoc-openapi
 springdoc:
   group-configs:
