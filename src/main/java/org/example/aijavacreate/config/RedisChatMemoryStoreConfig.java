@@ -1,5 +1,6 @@
 package org.example.aijavacreate.config;
 
+import cn.hutool.core.util.StrUtil;
 import dev.langchain4j.community.store.memory.chat.redis.RedisChatMemoryStore;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -22,11 +23,15 @@ public class RedisChatMemoryStoreConfig {
 
     @Bean
     public RedisChatMemoryStore redisChatMemoryStore() {
-        return RedisChatMemoryStore.builder()
+        RedisChatMemoryStore.Builder builder = RedisChatMemoryStore.builder()
                 .host(host)
                 .port(port)
-                .password(password)
-                .ttl(ttl)
-                .build();
+                .ttl(ttl);
+        // 当密码为空或空白字符串时，不设置密码参数，避免发送 AUTH 命令给无需认证的 Redis
+        if (StrUtil.isNotBlank(password)) {
+            builder.password(password);
+            builder.user("default");
+        }
+        return builder.build();
     }
 }
