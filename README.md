@@ -153,7 +153,7 @@ ai-java-create/
 ### 1. 克隆项目
 
 ```bash
-git clone https://github.com/ssz159/ai-java-create-penguin.git
+git clone https://github.com/penguin0100/ai-java-create-penguin.git
 cd ai-java-create
 ```
 
